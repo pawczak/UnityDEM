@@ -46,7 +46,7 @@
             {  
                 half heightPercent = inverseLerp(_minHeight,_maxHeight,IN.worldPos.y);
                 o.Albedo = tex2D(_MainTex, heightPercent);
-                o.Alpha = 0.35;
+                o.Alpha = tex2D(_MainTex, heightPercent);
             }
             ENDCG
         
