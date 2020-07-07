@@ -27,6 +27,7 @@
             struct Input
             {
                 half3 worldPos;
+                 float2 custom_uv; // cannot start with "uv"
             };
             
             half4 LightingUnlit (SurfaceOutput s, half3 lightDir, half atten) 
@@ -41,10 +42,19 @@
             {
                 return saturate((value-a)/(b-a));
             }
+            
+            void vert (inout appdata_full v, out Input o)
+            {
+                // copy the unmodified texture coordinates (aka UVs)
+                o.custom_uv = v.texcoord.xy;
+            }
+ 
     
             void surf (Input IN, inout SurfaceOutput o)
             {  
-                half heightPercent = inverseLerp(_minHeight,_maxHeight,IN.worldPos.y);
+                float2 uv = TRANSFORM_TEX(IN.custom_uv, _MainTex);
+                
+                half heightPercent = inverseLerp(_minHeight,_maxHeight, IN.worldPos.y);
                 o.Albedo = tex2D(_MainTex, heightPercent);
                 o.Alpha = tex2D(_MainTex, heightPercent);
             }
